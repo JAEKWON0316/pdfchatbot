@@ -18,7 +18,7 @@ export type GeminiRequest = z.infer<typeof GeminiRequestSchema>;
 
 export async function fetchGeminiApi(
   body: GeminiRequest,
-): Promise<{ success: boolean; data?: any; error?: string }> {
+): Promise<{ success: boolean; data?: unknown; error?: string }> {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -40,4 +40,3 @@ export async function fetchGeminiApi(
     return { success: false, error: (error as Error).message };
   }
 }
-  

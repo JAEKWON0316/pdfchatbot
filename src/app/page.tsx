@@ -78,7 +78,7 @@ export default function Home() {
           )
         );
 
-      } catch (e: any) {
+      } catch (e) {
         console.error("API request error:", e);
         setMessages(prev =>
           prev.map(msg =>
