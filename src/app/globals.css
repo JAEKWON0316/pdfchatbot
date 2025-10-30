@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* 2025 트렌드: 연한 파스텔톤 라운드 그라데이션 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
+  border-radius: 8px;
+  min-height: 40px;
+  border: 2px solid rgba(255,255,255,0.7);
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #c7d2fe 0%, #bae6fd 100%);
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(245,247,255,0.5);
+  border-radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #c7d2fe 0%, #bae6fd 100%);
+    border: 2px solid rgba(30,41,59,0.2);
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(30,41,59,0.08);
+  }
+}
+  
