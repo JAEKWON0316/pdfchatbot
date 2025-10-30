@@ -1,5 +1,6 @@
 // 백엔드 API 클라이언트
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// Vercel rewrites를 사용하므로 상대 경로 사용
+const API_BASE_URL = '';
 
 export interface ChatResponse {
   answer: string;

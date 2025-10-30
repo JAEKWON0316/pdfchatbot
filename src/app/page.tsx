@@ -51,8 +51,8 @@ export default function Home() {
 
     const processRequest = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-        const response = await fetch(`${apiUrl}/api/rag`, {
+        // Vercel rewrites를 사용하므로 상대 경로 사용
+        const response = await fetch('/api/rag', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question: input }),
