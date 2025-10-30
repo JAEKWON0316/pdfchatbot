@@ -74,7 +74,12 @@ const ChatMessageCard = ({ role, content, time, references, isLoading, isError, 
             <ul className="flex flex-wrap gap-2">
               {references.map((ref, i) => (
                 <li key={i}>
-                  <a href={`/data/${ref}.pdf`} download className="flex items-center bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium border border-blue-100 hover:bg-blue-100 transition">
+                  <a 
+                    href={`/api/files/${encodeURIComponent(ref)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-xs font-medium border border-blue-100 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition"
+                  >
                     <Download className="w-3 h-3 mr-1.5" />
                     {ref}
                   </a>

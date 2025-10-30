@@ -24,6 +24,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { ragRouter } from './routes/rag.js';
+import { filesRouter } from './routes/files.js';
 import { uploadRouter } from './routes/upload.js';
 
 const app = express();
@@ -46,6 +47,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // 라우터 설정
 app.use('/api/rag', ragRouter);
+app.use('/api/files', filesRouter);
 app.use('/api/upload', uploadRouter);
 
 // 헬스체크 엔드포인트

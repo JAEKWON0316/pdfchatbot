@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "ingest": "node --loader ts-node/esm ./scripts/ingest-pdf.ts"
+    "ingest": "node --loader ts-node/esm ./scripts/ingest-pdf.ts",
+    "upload-pdfs": "node --loader ts-node/esm ./scripts/upload-pdfs-to-supabase.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
