@@ -52,3 +52,6 @@ next-env.d.ts
 # EC2 keys
 *.pem
 /EC2KEY
+
+# API backup (사용하지 않음)
+/src/app/api-backup
