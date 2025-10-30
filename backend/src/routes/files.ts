@@ -36,7 +36,7 @@ filesRouter.get('/', async (req, res) => {
     }
 });
 
-// 특정 PDF 파일 URL 조회
+// 특정 PDF 파일 다운로드 (한글 파일명으로)
 filesRouter.get('/:filename', async (req, res) => {
     try {
         const { filename } = req.params;
@@ -46,16 +46,24 @@ filesRouter.get('/:filename', async (req, res) => {
         const englishFilename = fileNameMap[decodedFilename] ||
             (decodedFilename.endsWith('.pdf') ? decodedFilename : `${decodedFilename}.pdf`);
 
-        const { data } = supabase.storage
+        // Supabase Storage에서 파일 다운로드
+        const { data, error } = await supabase.storage
             .from(BUCKET_NAME)
-            .getPublicUrl(englishFilename);
+            .download(englishFilename);
 
-        res.json({
-            name: decodedFilename,
-            url: data.publicUrl
-        });
+        if (error) throw error;
+
+        // 한글 파일명으로 다운로드
+        const koreanFilename = `${decodedFilename}.pdf`;
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(koreanFilename)}`);
+
+        // Blob을 Buffer로 변환하여 전송
+        const buffer = Buffer.from(await data.arrayBuffer());
+        res.send(buffer);
     } catch (error) {
-        console.error('File URL error:', error);
-        res.status(500).json({ error: '파일 URL을 가져올 수 없습니다.' });
+        console.error('File download error:', error);
+        res.status(500).json({ error: '파일 다운로드에 실패했습니다.' });
     }
 });

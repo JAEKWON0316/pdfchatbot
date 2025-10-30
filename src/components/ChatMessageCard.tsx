@@ -78,10 +78,10 @@ const ChatMessageCard = ({ role, content, time, references, isLoading, isError, 
                     href={`/api/files/${encodeURIComponent(ref)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-xs font-medium border border-blue-100 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition"
+                    className="flex items-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 md:px-3 py-1 rounded-full text-xs font-medium border border-blue-100 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition active:scale-95"
                   >
-                    <Download className="w-3 h-3 mr-1.5" />
-                    {ref}
+                    <Download className="w-3 h-3 mr-1 md:mr-1.5 flex-shrink-0" />
+                    <span className="truncate max-w-[150px] md:max-w-none">{ref}</span>
                   </a>
                 </li>
               ))}
