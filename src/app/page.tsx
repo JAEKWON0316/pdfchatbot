@@ -1,4 +1,6 @@
 "use client";
+'use client';
+
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -26,6 +28,11 @@ function formatTime(date: Date) {
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleReset = () => {
+    setMessages([]);
+    setIsLoading(false);
+  };
 
   const handleSend = async (input: string) => {
     if (!input.trim() || isLoading) return;
@@ -106,9 +113,9 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <Header />
-      <main className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50 bg-gradient-to-br from-purple-50 via-indigo-50 via-blue-50 to-purple-100">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors">
+      <Header onReset={handleReset} />
+      <main className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 dark:scrollbar-thumb-gray-700 scrollbar-track-blue-50 dark:scrollbar-track-gray-900 bg-gradient-to-br from-purple-50 via-indigo-50 via-blue-50 to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors">
         <ChatSection messages={messages} isLoading={isLoading} />
       </main>
       <ChatInput onSend={handleSend} isLoading={isLoading} />

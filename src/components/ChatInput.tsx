@@ -19,10 +19,10 @@ const ChatInput = ({ onSend, isLoading }: ChatInputProps) => {
   };
 
   return (
-    <div className="flex-none w-full bg-white/80 px-2 py-4 shadow-inner z-20 flex flex-col items-center">
+    <div className="flex-none w-full bg-white/80 dark:bg-gray-900/80 px-2 py-4 shadow-inner z-20 flex flex-col items-center transition-colors">
       <form className="w-full max-w-3xl flex gap-2" onSubmit={handleSubmit}>
         <input
-          className="flex-1 px-4 py-3 rounded-2xl shadow-lg shadow-blue-100/40 border-b border-b-gray-100/30 border-l border-l-gray-100/30 border-r border-r-gray-100/30 border-t-transparent focus:outline-none focus:ring-2 focus:ring-blue-200 text-base bg-white text-black placeholder-gray-400 transition-all duration-150"
+          className="flex-1 px-4 py-3 rounded-2xl shadow-lg shadow-blue-100/40 dark:shadow-gray-800/40 border-b border-b-gray-100/30 dark:border-b-gray-700/30 border-l border-l-gray-100/30 dark:border-l-gray-700/30 border-r border-r-gray-100/30 dark:border-r-gray-700/30 border-t-transparent focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-600 text-base bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-150"
           type="text"
           placeholder="질문을 입력하세요..."
           value={input}
@@ -50,12 +50,12 @@ const ChatInput = ({ onSend, isLoading }: ChatInputProps) => {
       </form>
       <div className="w-full max-w-3xl flex flex-col items-center gap-1 mt-2">
         <div className="w-full flex justify-center">
-          <div className="text-xs text-gray-400 bg-white/80 px-4 py-2 rounded-full shadow text-center">
+          <div className="text-xs text-gray-400 dark:text-gray-500 bg-white/80 dark:bg-gray-800/80 px-4 py-2 rounded-full shadow text-center transition-colors">
           <span className="font-semibold">Enter</span>로 전송, <span className="font-semibold">Shift+Enter</span>로 줄바꿈
           </div>
         </div>
         <div className="w-full flex justify-center">
-          <div className="text-xs text-blue-500 font-semibold text-center">더 정확한 답변을 위해 구체적으로 질문해 주세요!</div>
+          <div className="text-xs text-blue-500 dark:text-blue-400 font-semibold text-center">더 정확한 답변을 위해 구체적으로 질문해 주세요!</div>
         </div>
       </div>
     </div>

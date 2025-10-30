@@ -36,10 +36,10 @@ const ChatMessageCard = ({ role, content, time, references, isLoading, isError, 
         </div>
       )}
       <div
-        className={`rounded-2xl px-4 py-1 md:px-5 md:py-2 text-sm leading-relaxed tracking-normal whitespace-pre-wrap font-medium shadow
+        className={`rounded-2xl px-4 py-1 md:px-5 md:py-2 text-sm leading-relaxed tracking-normal whitespace-pre-wrap font-medium shadow transition-colors
         ${role === 'user'
-            ? 'bg-gradient-to-br from-blue-400 to-blue-300 text-white border-none'
-            : isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-white text-gray-900 border border-gray-100'}
+            ? 'bg-gradient-to-br from-blue-400 to-blue-300 dark:from-blue-600 dark:to-blue-500 text-white border-none'
+            : isError ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-100 dark:border-gray-700'}
         `}
         style={{ minWidth: 60, maxWidth: 600 }}
       >
