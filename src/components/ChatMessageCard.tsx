@@ -38,8 +38,8 @@ const ChatMessageCard = ({ role, content, time, references, isLoading, isError, 
       <div
         className={`rounded-2xl px-4 py-1 md:px-5 md:py-2 text-sm leading-relaxed tracking-normal whitespace-pre-wrap font-medium shadow
         ${role === 'user'
-          ? 'bg-gradient-to-br from-blue-400 to-blue-300 text-white border-none'
-          : isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-white text-gray-900 border border-gray-100'}
+            ? 'bg-gradient-to-br from-blue-400 to-blue-300 text-white border-none'
+            : isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-white text-gray-900 border border-gray-100'}
         `}
         style={{ minWidth: 60, maxWidth: 600 }}
       >
@@ -74,7 +74,7 @@ const ChatMessageCard = ({ role, content, time, references, isLoading, isError, 
             <ul className="flex flex-wrap gap-2">
               {references.map((ref, i) => (
                 <li key={i}>
-                  <a href={`/data/${ref}`} download className="flex items-center bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium border border-blue-100 hover:bg-blue-100 transition">
+                  <a href={`/data/${ref}.pdf`} download className="flex items-center bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium border border-blue-100 hover:bg-blue-100 transition">
                     <Download className="w-3 h-3 mr-1.5" />
                     {ref}
                   </a>

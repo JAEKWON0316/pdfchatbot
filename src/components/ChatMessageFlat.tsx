@@ -27,7 +27,7 @@ const ChatMessageFlat = ({ role, content, time, references }: ChatMessageFlatPro
             <ul className="flex flex-wrap gap-2">
               {references.map((ref, i) => (
                 <li key={i}>
-                  <a href={`/data/${ref}`} download className="underline text-blue-500 hover:text-blue-700">{ref}</a>
+                  <a href={`/data/${ref}.pdf`} download className="underline text-blue-500 hover:text-blue-700">{ref}</a>
                 </li>
               ))}
             </ul>
