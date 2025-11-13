@@ -62,8 +62,10 @@ jobs:
       working-directory: ./backend
       env:
         REGISTRY: ghcr.io
-        IMAGE_NAME: ${{ github.repository }}/backend
       run: |
+        REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+        IMAGE_NAME="$REPO_LC/backend"
+        
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
         docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} -t $REGISTRY/$IMAGE_NAME:latest .
         docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
