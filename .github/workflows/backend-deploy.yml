@@ -1,0 +1,109 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-deploy.yml'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./backend
+      run: npm ci
+
+    - name: TypeScript type check
+      working-directory: ./backend
+      run: npx tsc --noEmit
+
+    - name: Build check
+      working-directory: ./backend
+      run: npm run build
+
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./backend
+      run: npm ci
+
+    - name: Build
+      working-directory: ./backend
+      run: npm run build
+
+    - name: Build and push Docker image to GitHub Packages
+      working-directory: ./backend
+      env:
+        REGISTRY: ghcr.io
+        IMAGE_NAME: ${{ github.repository }}/backend
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+        docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} -t $REGISTRY/$IMAGE_NAME:latest .
+        docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+        docker push $REGISTRY/$IMAGE_NAME:latest
+
+    - name: Create deployment package
+      working-directory: ./backend
+      run: |
+        tar -czf ../backend-deploy.tar.gz \
+          dist package.json package-lock.json ecosystem.config.js
+
+    - name: Deploy to EC2
+      env:
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: |
+        echo "$EC2_KEY" > ec2_key.pem
+        chmod 400 ec2_key.pem
+        
+        scp -i ec2_key.pem -o StrictHostKeyChecking=no \
+          backend-deploy.tar.gz $EC2_USER@$EC2_HOST:~/
+        
+        ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
+          $EC2_USER@$EC2_HOST << 'EOF'
+          cd ~/backend
+          tar -xzf ~/backend-deploy.tar.gz
+          npm ci --only=production
+          pm2 restart pdfchatbot-backend || pm2 start dist/server.js --name pdfchatbot-backend
+          pm2 save
+          rm ~/backend-deploy.tar.gz
+        EOF
+        
+        rm ec2_key.pem
+
+    - name: Notify deployment
+      if: success()
+      run: echo "✅ Backend deployment to EC2 successful!"
+
+    - name: Notify failure
+      if: failure()
+      run: echo "❌ Backend deployment to EC2 failed!"
+
