@@ -29,7 +29,7 @@ jobs:
       working-directory: ./backend
       run: npx tsc --noEmit
 
-    - name: Build check
+    - name: Build
       working-directory: ./backend
       run: npm run build
 
@@ -63,9 +63,10 @@ jobs:
       env:
         REGISTRY: ghcr.io
       run: |
+        # Repository 이름 소문자 변환
         REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
         IMAGE_NAME="$REPO_LC/backend"
-        
+
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
         docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} -t $REGISTRY/$IMAGE_NAME:latest .
         docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
@@ -74,8 +75,7 @@ jobs:
     - name: Create deployment package
       working-directory: ./backend
       run: |
-        tar -czf ../backend-deploy.tar.gz \
-          dist package.json package-lock.json ecosystem.config.js
+        tar -czf ../backend-deploy.tar.gz dist package.json package-lock.json ecosystem.config.js
 
     - name: Deploy to EC2
       env:
@@ -83,14 +83,15 @@ jobs:
         EC2_USER: ${{ secrets.EC2_USER }}
         EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
       run: |
+        # PEM 키 생성
         echo "$EC2_KEY" > ec2_key.pem
         chmod 400 ec2_key.pem
-        
-        scp -i ec2_key.pem -o StrictHostKeyChecking=no \
-          backend-deploy.tar.gz $EC2_USER@$EC2_HOST:~/
-        
-        ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
-          $EC2_USER@$EC2_HOST << 'EOF'
+
+        # 파일 전송
+        scp -i ec2_key.pem -o StrictHostKeyChecking=no backend-deploy.tar.gz $EC2_USER@$EC2_HOST:~/
+
+        # EC2 접속 후 배포
+        ssh -i ec2_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
           cd ~/backend
           tar -xzf ~/backend-deploy.tar.gz
           npm ci --only=production
@@ -98,7 +99,8 @@ jobs:
           pm2 save
           rm ~/backend-deploy.tar.gz
         EOF
-        
+
+        # PEM 키 삭제
         rm ec2_key.pem
 
     - name: Notify deployment
@@ -108,4 +110,3 @@ jobs:
     - name: Notify failure
       if: failure()
       run: echo "❌ Backend deployment to EC2 failed!"
-
