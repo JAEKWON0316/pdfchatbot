@@ -51,5 +51,5 @@ jobs:
     - name: Build check
       run: npm run build
       env:
-        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://3.25.51.77:3001' }}
+        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://3.106.186.205:3001' }}
 
